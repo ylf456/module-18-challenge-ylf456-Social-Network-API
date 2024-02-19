@@ -16,7 +16,7 @@ const thoughtSchema = new Schema(
         return moment(value).format("MM-DD-YYYY HH:mm:ss");
       },
     },
-    username: {
+    userName: {
       type: String,
       required: true,
     },
