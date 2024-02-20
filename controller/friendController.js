@@ -23,7 +23,7 @@ module.exports = {
   async addOneFriend(req, res) {
     try {
       const userData = await User.findOneAndUpdate(
-        {_id: req.params._id},
+        {_id: req.params.userId},
         {$addToSet: req.body.friendId},
         {runValidators: true, new: true},
         );
@@ -41,7 +41,7 @@ module.exports = {
  async deleteOneFriend(req, res) {
     try {
         const userData = await User.findOneAndUpdate(
-            {_id: req.params._id},
+            {_id: req.params.userId},
             {$pull: req.body.friendId},
             {runValidators: true, new: true},
             );

@@ -24,6 +24,7 @@ const reactionSchema = new Schema(
       },
     },
   },
+  { collection: 'reaction'},
   {
     toJSON: {
       virtuals: true,
