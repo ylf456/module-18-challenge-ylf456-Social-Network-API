@@ -27,7 +27,8 @@ const userSchema = new Schema(
         ref: "user",
       },
     ],
-  },
+  }, 
+  { collection: 'user'},
   {
     toJSON: {
       virtuals: true,

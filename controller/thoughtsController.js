@@ -54,7 +54,7 @@ module.exports = {
       const user = await User.findByIdAndUpdate(
         { _id: req.body.userId },
         { $addToSet: { thoughts: newthoughtId } },
-        { new: true }
+        { runValidators: true, new: true }
       );
 
       if (!user) {
@@ -102,7 +102,7 @@ module.exports = {
       const updateUser = await User.findOneAndUpdate(
         { thoughts: req.params._id },
         { $pull: { thoughts: req.params._id } },
-        { new: true }
+        { runValidators: true, new: true }
       );
       if (!updateUser) {
         return res.status(404).json({ message: "No user with this id!" });

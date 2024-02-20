@@ -36,15 +36,14 @@ module.exports = {
   async createUser(req, res) {
     try {
       const user = await User.create(req.body);
-      res.status.json(user);
-    // example req.body { 
-    //   userName (required), 
-    //   email (required), 
-    //   thoughts(optional), 
-    //   friends(optional)
-    // }
+      res.status(200).json(user);
+      // example req.body {
+      //   userName (required),
+      //   email (required),
+      // }
     } catch (err) {
       res.status(500).json(err);
+      console.log(err);
     }
   },
   // update one user, find one user by _id and update it (put)
@@ -53,8 +52,8 @@ module.exports = {
       // .findOneAndUpdate(condition, update , options)
       const user = await User.findOneAndUpdate(
         { _id: req.params.userId },
-        {$set: req.body},
-        { new: true }
+        { $set: req.body },
+        { runValidators: true, new: true }
       );
       res.status.json(user);
       //req.body { userName (required), email (required), thoughts , friends}
@@ -66,13 +65,13 @@ module.exports = {
   // also delete all associated thought
   async deleteOneUser(req, res) {
     try {
-      const users = await User.findOneAndDelete({_id : req.params.userId});
+      const users = await User.findOneAndDelete({ _id: req.params.userId });
       const _ids = users.map((obj) => obj.thoughts.id);
       if (users) {
         res.status(200).json(users); // return the one user it finds
         for (i = 0; i < _ids.length; i++) {
           const deleteThoughts = await Thought.deleteOne(_ids[i]);
-        }  // return deleteCount
+        } // return deleteCount
       } else {
         res.status(404).json("No user data was found");
         return;
@@ -81,5 +80,4 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-
 };
