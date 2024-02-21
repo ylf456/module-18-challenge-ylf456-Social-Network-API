@@ -5,12 +5,12 @@ module.exports = {
   // post route
   async addOneFriend(req, res) {
     try {
-      const userData = await User.findById({_id:req.params.userId});
+      const userData = await User.findById({ _id: req.params.userId });
       if (!userData) {
         res.status(404).json("No user with this _id was found");
         return;
       }
-      userData.friends.push(req.body); // req.body = {_id: }
+      userData.friends.push(req.body.newFriendId); // req.body = {_id: }
       await userData.save();
       res.status(200).json(userData);
     } catch (error) {
@@ -37,23 +37,25 @@ module.exports = {
     }
   },
   */
- // find one user by id and delete one friend form the array,
- async deleteOneFriend(req, res) {
+  // find one user by id and delete one friend form the array. (Only deletes the ref between two users)
+  async deleteOneFriend(req, res) {
     try {
-        const userData = await User.findOneAndUpdate(
-            {_id: req.params.userId},
-            {$pull: req.body.friendId},
-            {runValidators: true, new: true},
-            );
-          if (!userData) {
-            res.status(404).json("No user with this _id was found");
-            return;
-          }
-          res.status(200).json(userData);
-        } catch (error) {
-          res.status(500).json(error);
-        }
-      },
+      const userData = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { friends: req.body.friendId } },
+        { runValidators: true, new: true }
+      );
+      if (!userData) {
+        res.status(404).json("No user with this _id was found");
+        return;
+      }
+    // a
+      res.status(200).json(userData);
+    } catch (error) {
+      res.status(500).json(error);
+      console.log(error);
+    }
+  },
   /*    
   // wrong method to use Mongo   
   // find one user by id and delete one friend form the array,

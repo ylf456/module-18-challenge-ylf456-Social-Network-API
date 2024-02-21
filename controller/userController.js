@@ -4,7 +4,7 @@ module.exports = {
   // find every documents in the collection
   async getAllusers(req, res) {
     try {
-      const users = await User.find();
+      const users = await User.find().populate("thoughts").populate({path: "friends", model: "user"});
       if (users) {
         res.status(200).json(users);
       } else {
@@ -12,7 +12,8 @@ module.exports = {
         return;
       }
     } catch (error) {
-      res.status(500).json(err);
+      res.status(500).json(error);
+      console.log(error)
     }
   },
   //find one user document by its _id ()
@@ -55,10 +56,11 @@ module.exports = {
         { $set: req.body },
         { runValidators: true, new: true }
       );
-      res.status.json(user);
+      res.status(200).json(user);
       //req.body { userName (required), email (required), thoughts , friends}
     } catch (err) {
       res.status(500).json(err);
+      console.log(err);
     }
   },
   // delete one user, find one user by _id and delete it ()
@@ -66,18 +68,29 @@ module.exports = {
   async deleteOneUser(req, res) {
     try {
       const users = await User.findOneAndDelete({ _id: req.params.userId });
-      const _ids = users.map((obj) => obj.thoughts.id);
+
       if (users) {
-        res.status(200).json(users); // return the one user it finds
-        for (i = 0; i < _ids.length; i++) {
-          const deleteThoughts = await Thought.deleteOne(_ids[i]);
-        } // return deleteCount
+        if (users.thoughts) {
+         // const _ids = await users.map((obj) => obj.thoughts._id);
+          for (i = 0; i < users.thoughts.length; i++) {
+            const deleteThoughts = await Thought.deleteOne({ _id: users.thoughts[i] });
+          }
+          res.json(
+            "Successfully deleted one user and its related thoughts data"
+          );
+          // return deleteCount
+        } else {
+          return res.json(
+            "Successfully deleted one user, and there was no thought data related with user to delete"
+          );
+        }
       } else {
         res.status(404).json("No user data was found");
         return;
       }
     } catch (error) {
-      res.status(500).json(err);
+      res.status(500).json(error);
+      console.log(error);
     }
   },
 };
