@@ -18,24 +18,26 @@ module.exports = {
       res.status(200).json(thoughtData);
     } catch (error) {
       res.status(500).json(error);
+      console.log(error);
     }
   },
   // find one Reaction by its _id and delete it, and update its associated thought doc.
   // delete route
   async deleteOneReaction(req, res) {
     try {
-      const deleteOneReaction = await thought.findOneAndUpdate(
-        { _id: req.body.thoughtId },
-        { $pull: { reactions: { _id: req.body.reactionId } } },
+      const deleteOneReaction = await Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $pull: { reactions: { reactionId: req.body.reactionId } } },
         { runValidators: true, new: true }
       );
       
       if (!deleteOneReaction) {
-        return res.status(404).json({ message: 'No application with this id!' });
+        return res.status(404).json({ message: 'No thought with this id!' });
       }
       res.status(200).json(deleteOneReaction);
     } catch (error) {
       res.status(500).json(error);
+      console.log(error)
     }
   },
 };

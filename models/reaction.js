@@ -1,11 +1,11 @@
 const { Schema, model } = require("mongoose");
-
+const mongoose = require("mongoose");
 // Schema to create a course model
 const reactionSchema = new Schema(
   {
     reactionId: {
-      type: Schema.Types.ObjectId,
-      default: () => new Types.ObjectId(),
+      type: mongoose.Types.ObjectId,
+      default: () => new mongoose.Types.ObjectId(),
     },
     reactionBody: {
       type: String,
@@ -24,7 +24,8 @@ const reactionSchema = new Schema(
       },
     },
   },
-  { collection: 'reaction'},
+  { _id: false },
+  { collection: "reaction" },
   {
     toJSON: {
       virtuals: true,
@@ -34,6 +35,6 @@ const reactionSchema = new Schema(
   }
 );
 
-//const Reaction = model("course", reactionSchema);
+//const Reaction = model("reaction", reactionSchema);
 
 module.exports = reactionSchema;
