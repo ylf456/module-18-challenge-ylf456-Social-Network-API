@@ -107,7 +107,7 @@ module.exports = {
         { runValidators: true, new: true }
       );
       if (!updateUser) {
-        return res.status(404).json({ message: "No user with this id!" });
+        return res.status(404).json({ message: "Succesfully deleted the thought data, but find no user data associated with this thought" });
       }
 
       res.status(200).json(updateUser);
