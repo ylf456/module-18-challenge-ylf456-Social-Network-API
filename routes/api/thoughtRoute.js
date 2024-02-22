@@ -6,6 +6,7 @@ const {
   createOneThought,
   updateOneThought,
   deleteOneThought,
+  createManyThought
 } = require("../../controller/thoughtsController");
 
 const {
@@ -14,6 +15,8 @@ const {
 } = require("../../controller/reactionController");
 
 router.route("/").get(getAllthoughts).post(createOneThought);
+
+router.route("/:userId").post(createManyThought);
 
 router
   .route("/:thoughtId")

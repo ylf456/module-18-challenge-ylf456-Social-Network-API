@@ -38,10 +38,12 @@ module.exports = {
       //         userName: req.body.userName,
       //         userId : req.body.userId
       //                    }
+      //console.log(req.body)
       const thoughtRequest = {
         thoughtText: req.body.thoughtText,
         userName: req.body.userName,
       };
+      console.log(thoughtRequest)
       const thought = await Thought.create(thoughtRequest);
       if (!thought) {
         return res
@@ -115,4 +117,50 @@ module.exports = {
       res.status(200).json(error);
     }
   },
+  async createManyThought(req, res) {
+    try {
+      // example req.body = {
+      //         thoughtText: req.body.thoughtText,
+      //         userName: req.body.userName,
+      //         userId : req.body.userId
+      //                    }
+      console.log(req.body)
+      const thoughtRequest =req.body.map((obj)=> obj = {
+        thoughtText: obj.thoughtText,
+        userName: obj.userName,
+      })
+      console.log(thoughtRequest)
+      const thought = await Thought.create(thoughtRequest);
+      if (!thought) {
+        return res
+          .status(400)
+          .json({ message: "error in creating new thought doc" });
+      }
+     // console.log(thought)
+      const newthoughtId = thought.map((obj)=> obj._id); // array of _id
+      //example 
+//       [
+//   new ObjectId('65d6a3a2bfaeee57462e1c91'),
+//   new ObjectId('65d6a3a2bfaeee57462e1c92')
+//       ]
+     // console.log('newthoughtId')
+     // console.log(newthoughtId);
+      const user = await User.findByIdAndUpdate(
+        { _id: req.params.userId },
+        { $addToSet: { thoughts: newthoughtId } },
+        { runValidators: true, new: true }
+      );
+
+      if (!user) {
+        return res.status(404).json({
+          message: "thought created, but found no user with that ID",
+        });
+      }
+      res.json(user);
+    } catch (error) {
+      res.status(500).json(error);
+      console.log(error);
+    }
+  },
 };
+// seeding user and thoughts 
