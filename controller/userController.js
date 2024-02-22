@@ -70,7 +70,7 @@ module.exports = {
       const users = await User.findOneAndDelete({ _id: req.params.userId });
 
       if (users) {
-        if (users.thoughts) {
+        if (users.thoughts.length > 0) {
          // const _ids = await users.map((obj) => obj.thoughts._id);
           for (i = 0; i < users.thoughts.length; i++) {
             const deleteThoughts = await Thought.deleteOne({ _id: users.thoughts[i] });
