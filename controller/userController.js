@@ -69,14 +69,14 @@ module.exports = {
   // also delete all associated thought
   async deleteOneUser(req, res) {
     try {
-      const users = await User.findOneAndDelete({ _id: req.params.userId });
+      const user = await User.findOneAndDelete({ _id: req.params.userId });
 
-      if (users) {
-        if (users.thoughts.length > 0) {
+      if (user) {
+        if (user.thoughts.length > 0) {
           // const _ids = await users.map((obj) => obj.thoughts._id);
-          for (i = 0; i < users.thoughts.length; i++) {
+          for (i = 0; i < user.thoughts.length; i++) {
             const deleteThoughts = await Thought.deleteOne({
-              _id: users.thoughts[i],
+              _id: user.thoughts[i],
             });
           }
          //  mongoDB specific way
