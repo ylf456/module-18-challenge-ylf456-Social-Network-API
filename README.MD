@@ -23,12 +23,12 @@ Download the application folder from the following GitHub repo: https://github.c
 
 To use this application:
 
-1. Open the terminal in your code editor and change the directory to root folder.
-2. type `npm i` in the terminal to install the required npm package .
-3. type `npm run start` or `npm start` to sync the database and turn on server.
-4. testing out the routes with `get` , `post`, `put` and `delete` calls on your local server.
+1. Open the terminal in your code editor and change the directory to the root folder.
+2. run `npm i` in the terminal to install the required npm package.
+3. run `npm run start` or `npm start` to sync the database and turn on the server.
+4. testing out the routes with `get`, `post`, `put` and `delete` calls on your local server.
 
-Also refer to the demo video for more details: 
+Also, refer to the demo video for more details: 
 </br>https://drive.google.com/file/d/16O8elfDu8X7ZGSSEPywmFdVXhKNzfpVA/view
 
 
