@@ -4,7 +4,9 @@ module.exports = {
   // find every documents in the collection
   async getAllusers(req, res) {
     try {
-      const users = await User.find().populate("thoughts").populate({path: "friends", model: "user"});
+      const users = await User.find()
+        .populate("thoughts")
+        .populate({ path: "friends", model: "user" });
       if (users) {
         res.status(200).json(users);
       } else {
@@ -13,7 +15,7 @@ module.exports = {
       }
     } catch (error) {
       res.status(500).json(error);
-      console.log(error)
+      console.log(error);
     }
   },
   //find one user document by its _id ()
@@ -71,10 +73,14 @@ module.exports = {
 
       if (users) {
         if (users.thoughts.length > 0) {
-         // const _ids = await users.map((obj) => obj.thoughts._id);
+          // const _ids = await users.map((obj) => obj.thoughts._id);
           for (i = 0; i < users.thoughts.length; i++) {
-            const deleteThoughts = await Thought.deleteOne({ _id: users.thoughts[i] });
+            const deleteThoughts = await Thought.deleteOne({
+              _id: users.thoughts[i],
+            });
           }
+         //  mongoDB specific way
+         // Thought.deleteMany({ _id: { $in: user.thoughts } });
           res.json(
             "Successfully deleted one user and its related thoughts data"
           );
